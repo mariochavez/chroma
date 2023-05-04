@@ -1,0 +1,3 @@
+module Chroma
+  VERSION: String
+end
