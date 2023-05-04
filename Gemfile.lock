@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chroma (0.1.0)
+    chroma-db (0.1.0)
       dry-monads (~> 1.6)
 
 GEM
@@ -62,7 +62,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
-  chroma!
+  chroma-db!
   minitest (~> 5.0)
   rake (~> 13.0)
   rbs (~> 3.1)

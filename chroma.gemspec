@@ -3,7 +3,7 @@
 require_relative "lib/chroma/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "chroma"
+  spec.name = "chroma-db"
   spec.version = Chroma::VERSION
   spec.authors = ["Mario Alberto Chávez"]
   spec.email = ["mario.chavez@gmail.com"]
