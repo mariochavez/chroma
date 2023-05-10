@@ -143,6 +143,207 @@ class CollectionTest < Minitest::Test
     end
   end
 
+  def test_it_modifies_collection
+    body = request_body
+    name = body.fetch(:name)
+    metadata = body.fetch(:metadata)
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}",
+      method: :put,
+      request_body: {new_name: "new-collection-name", new_metadata: {source: "test"}}
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+
+    deleted = collection.modify("new-collection-name", {source: "test"})
+
+    assert deleted
+  end
+
+  def test_it_counts_collection_embeddings
+    body = request_body
+    name = body.fetch(:name)
+    metadata = body.fetch(:metadata)
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/count",
+      method: :get,
+      request_body: "",
+      response_body: 1
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+
+    count = collection.count
+
+    assert_equal 1, count
+  end
+
+  def test_it_adds_embeddings_to_collection
+    embeddings = [
+      Chroma::Resources::Embedding.new(id: "pdf-1", embedding: [1.5, 2.9, 3.4], metadata: {source: "Test"}, document: "Content file 1"),
+      Chroma::Resources::Embedding.new(id: "pdf-2", embedding: [9.8, 2.3, 2.9], metadata: {source: "Test"}, document: "Content file 2")
+    ]
+    body = request_body(
+      ids: embeddings.map(&:id),
+      embeddings: embeddings.map(&:embedding),
+      metadatas: embeddings.map(&:metadata),
+      documents: embeddings.map(&:document)
+    )
+    name = body.delete(:name)
+    metadata = body.delete(:metadata)
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/add",
+      method: :post,
+      request_body: body.merge(increment_index: true),
+      response_body: true
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+
+    added = collection.add(embeddings)
+
+    assert added
+  end
+
+  def test_it_updates_embeddings_to_collection
+    embeddings = [
+      Chroma::Resources::Embedding.new(id: "pdf-1", embedding: [1.5, 2.9, 3.4], metadata: {source: "Test"}, document: "Content file 1"),
+      Chroma::Resources::Embedding.new(id: "pdf-2", embedding: [9.8, 2.3, 2.9], metadata: {source: "Test"}, document: "Content file 2")
+    ]
+    body = request_body(
+      ids: embeddings.map(&:id),
+      embeddings: embeddings.map(&:embedding),
+      metadatas: embeddings.map(&:metadata),
+      documents: embeddings.map(&:document)
+    )
+    name = body.delete(:name)
+    metadata = body.delete(:metadata)
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/update",
+      method: :post,
+      request_body: body,
+      response_body: true
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+
+    updated = collection.update(embeddings)
+
+    assert updated
+  end
+
+  def test_it_upsert_embeddings_to_collection
+    embeddings = [
+      Chroma::Resources::Embedding.new(id: "pdf-1", embedding: [1.5, 2.9, 3.4], metadata: {source: "Test"}, document: "Content file 1"),
+      Chroma::Resources::Embedding.new(id: "pdf-2", embedding: [9.8, 2.3, 2.9], metadata: {source: "Test"}, document: "Content file 2")
+    ]
+    body = request_body(
+      ids: embeddings.map(&:id),
+      embeddings: embeddings.map(&:embedding),
+      metadatas: embeddings.map(&:metadata),
+      documents: embeddings.map(&:document)
+    )
+    name = body.delete(:name)
+    metadata = body.delete(:metadata)
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/upsert",
+      method: :post,
+      request_body: body.merge(increment_index: true),
+      response_body: true
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+
+    upserted = collection.upsert(embeddings)
+
+    assert upserted
+  end
+
+  def test_it_gets_embeddings_from_collection
+    embeddings = [
+      Chroma::Resources::Embedding.new(id: "pdf-1", embedding: [1.5, 2.9, 3.4], metadata: {source: "Test"}, document: "Content file 1"),
+      Chroma::Resources::Embedding.new(id: "pdf-2", embedding: [9.8, 2.3, 2.9], metadata: {source: "Test"}, document: "Content file 2")
+    ]
+
+    body = {
+      ids: embeddings.map(&:id),
+      where: {},
+      sort: nil,
+      limit: nil,
+      offset: nil,
+      where_document: {},
+      include: %w[metadatas documents]
+    }
+    name = "test-collection"
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/get",
+      method: :post,
+      request_body: body,
+      response_body: {
+        ids: embeddings.map(&:id),
+        embeddings: embeddings.map(&:embedding),
+        metadatas: embeddings.map(&:metadata),
+        documents: embeddings.map(&:document)
+      }
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name)
+
+    result_embeddings = collection.get(ids: body.fetch(:ids))
+
+    assert_equal 2, result_embeddings.size
+    assert_equal "pdf-1", result_embeddings[0].id
+  end
+
+  def test_it_deletes_embeddings_from_collection
+    embeddings = [
+      Chroma::Resources::Embedding.new(id: "pdf-1", embedding: [1.5, 2.9, 3.4], metadata: {source: "Test"}, document: "Content file 1"),
+      Chroma::Resources::Embedding.new(id: "pdf-2", embedding: [9.8, 2.3, 2.9], metadata: {source: "Test"}, document: "Content file 2")
+    ]
+
+    body = {
+      ids: embeddings.map(&:id),
+      where: {},
+      where_document: {}
+    }
+    name = "test-collection"
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/delete",
+      method: :post,
+      request_body: body,
+      response_body: ["7d993230-c215-40c3-ad23-d8a80bcffca1", "28b1da30-6fab-4cce-9969-3f3fed24df0a"]
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name)
+
+    deleted_embeddings = collection.delete(ids: body.fetch(:ids))
+
+    assert_equal 2, deleted_embeddings.size
+  end
+
+  def test_it_create_an_index_for_a_collection
+    name = "test-collection"
+
+    stub_collection_request(
+      "#{Chroma.api_url}/collections/#{name}/create_index",
+      method: :post,
+      request_body: "",
+      response_body: true
+    )
+
+    collection = Chroma::Resources::Collection.new(name: name)
+    result = collection.create_index
+
+    assert result
+  end
+
   private
 
   def stub_collection_request(url, method: :get, status: 200, request_body: {}, response_body: {})
