@@ -11,6 +11,7 @@ require_relative "chroma/api_operations/request"
 require_relative "chroma/errors"
 require_relative "chroma/resources/embedding"
 require_relative "chroma/resources/collection"
+require_relative "chroma/resources/database"
 
 module Chroma
   # map to the same values as the standard library's logger
