@@ -353,7 +353,7 @@ class CollectionTest < Minitest::Test
   end
 
   def request_body(attrs = {})
-    {name: "test-collection", metadata: {source: "test"}}.deep_merge(attrs)
+    {name: "test-collection", metadata: {source: "test"}}.merge(attrs)
   end
 
   def deep_stringify_keys(hash)
