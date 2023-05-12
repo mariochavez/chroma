@@ -4,6 +4,5 @@ format: progress        # default: Standard::Formatter
 ruby_version: 3.2.2     # default: RUBY_VERSION
 default_ignores: false  # default: true
 
-# ignore:                 # default: []
-#   - Layout/ArgumentAlignment
-#   - Layout/HashAlignment
+ignore:                 # default: []
+  - 'vendor/bundle/**/*'
