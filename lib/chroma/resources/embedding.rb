@@ -11,7 +11,7 @@ module Chroma
       attr_reader :document
       attr_reader :distance
 
-      def initialize(id:, embedding:, metadata: nil, document: nil, distance: nil)
+      def initialize(id:, embedding: nil, metadata: nil, document: nil, distance: nil)
         @id = id
         @embedding = embedding
         @metadata = metadata

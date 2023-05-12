@@ -156,7 +156,7 @@ class CollectionTest < Minitest::Test
 
     collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
 
-    deleted = collection.modify("new-collection-name", {source: "test"})
+    deleted = collection.modify("new-collection-name", new_metadata: {source: "test"})
 
     assert deleted
   end

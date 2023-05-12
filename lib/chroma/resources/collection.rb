@@ -219,8 +219,9 @@ module Chroma
       #   collection.modify("ruby-3.2-documentation")
       #
       # Returns nothing.
-      def modify(new_name, new_metadata)
-        payload = {new_name:, new_metadata:}
+      def modify(new_name, new_metadata: {})
+        payload = {new_name:}
+        payload[:new_metadata] = new_metadata if new_metadata.any?
 
         result = self.class.execute_request(:put, "#{Chroma.api_url}/collections/#{name}", payload)
 
@@ -360,11 +361,19 @@ module Chroma
       end
 
       def build_embeddings_response(result)
-        result_ids = result.fetch("ids")
-        result_embeddings = result.fetch("embeddings")
-        result_documents = result.fetch("documents")
-        result_metadatas = result.fetch("metadatas")
-        result_distances = result.fetch("distances", [])
+        Chroma::Util.log_debug("Building embeddings from #{result.inspect}")
+
+        result_ids = result.fetch("ids", []).flatten
+        result_embeddings = (result.dig("embeddings") || []).flatten
+        result_documents = (result.dig("documents") || []).flatten
+        result_metadatas = (result.dig("metadatas") || []).flatten
+        result_distances = (result.dig("distances") || []).flatten
+
+        Chroma::Util.log_debug("Ids #{result_ids.inspect}")
+        Chroma::Util.log_debug("Embeddings #{result_embeddings.inspect}")
+        Chroma::Util.log_debug("Documents #{result_documents.inspect}")
+        Chroma::Util.log_debug("Metadatas #{result_metadatas.inspect}")
+        Chroma::Util.log_debug("distances #{result_distances.inspect}")
 
         result_ids.map.with_index do |id, index|
           Chroma::Resources::Embedding.new(id: id, embedding: result_embeddings[index], document: result_documents[index], metadata: result_metadatas[index], distance: result_distances[index])

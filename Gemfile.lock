@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chroma-db (0.1.0)
+    chroma-db (0.2.0)
       dry-monads (~> 1.6)
 
 GEM
