@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Mario Alberto Chávez"]
   spec.email = ["mario.chavez@gmail.com"]
 
-  spec.summary = "Ruby bindings for Chroma DB."
+  spec.summary = "Ruby client for Chroma DB."
   spec.description = "Chroma is the open-source embedding database. Chroma makes it easy to build LLM apps by making knowledge, facts, and skills pluggable for LLMs."
   spec.homepage = "https://mariochavez.io"
   spec.license = "MIT"
