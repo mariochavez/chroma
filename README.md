@@ -38,7 +38,7 @@ A small example usage
     collection.add(embeddings)
 ```
 
-For a complete example, please refer to the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma\ Gem.ipynb)
+For a complete example, please refer to the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma%20Gem.ipynb)
 
 ## Requirements
 - Ruby 3.2 or newer
@@ -54,7 +54,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
     $ gem install chroma-db
 
 ## Use the Jupyter notebook
-To use the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma\ Gem.ipynb) in this repository, please install python 3.9 or better, iruby and Jupyter notebook dependencies:
+To use the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma%20Gem.ipynb) in this repository, please install python 3.9 or better, iruby and Jupyter notebook dependencies:
 
    $ pip install jupyterlab notebook ipywidgets
    $ gem install iruby
