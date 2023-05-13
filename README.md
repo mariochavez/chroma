@@ -1,39 +1,77 @@
-# Chroma
+# Chroma's Ruby client
 
-TODO: Delete this and the text below, and describe your gem
+Chroma is the open-source embedding database. Chroma makes it easy to build LLM apps by making knowledge, facts, and skills pluggable for LLMs.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chroma`. To experiment with that code, run `bin/console` for an interactive prompt.
+This Ruby gem is a client to connect to Chroma's database via its API.
+
+Find more information about Chroma on how to install at their website. [https://www.trychroma.com/](https://www.trychroma.com/)
+
+## Description
+Chroma-rb is a Ruby client for Chroma Database. It works with version
+0.3.22 or better.
+
+A small example usage
+
+```ruby
+    require "logger"
+
+    # Requiere Chroma Ruby client.
+    require "chroma-db"
+
+    # Configure Chroma's host. Here you can specify your own host.
+    Chroma.connect_host = "http://localhost:8000"
+    Chroma.logger = Logger.new($stdout)
+    Chroma.log_level = Chroma::LEVEL_ERROR
+
+    # Check current Chrome server version
+    version = Chroma::Resources::Database.version
+    puts version
+
+    # Create a new collection
+    collection = Chroma::Resources::Collection.create(collection_name, {lang: "ruby", gem: "chroma-db"})
+
+    # Add embeddings
+    embeddings = [
+      Chroma::Resources::Embedding.new(id: "1", embedding: [], metadata: {client: "chroma-rb"}, document: "ruby"),
+      Chroma::Resources::Embedding.new(id: "2", embedding: [], metadata: {client: "chroma-rb"}, document: "rails")
+    ]
+    collection.add(embeddings)
+```
+
+For a complete example, please refer to the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma%20Gem.ipynb)
+
+## Requirements
+- Ruby 3.2 or newer
+- Chroma Database 0.3.22 or later running as a client/server model.
 
 ## Installation
+To install the gem and add to the application's Gemfile, execute:
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add chroma-db
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ gem install chroma-db
 
-## Usage
+## Use the Jupyter notebook
+To use the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma%20Gem.ipynb) in this repository, please install python 3.9 or better, iruby and Jupyter notebook dependencies:
 
-TODO: Write usage instructions here
+    $ pip install jupyterlab notebook ipywidgets
+    $ gem install iruby
+    $ iruby register --force
 
-## Development
+## Development 
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment. 
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+To install this gem onto your local machine, run `bundle exec rake install`.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To generate Rdoc documentation for the gem, run `bundle exec rake rdoc`.
 
 ## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/mariochavez/chroma. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/mariochavez/chroma/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/mariochavez/chroma. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/mariochavez/chroma/blob/main/CODE_OF_CONDUCT.md). 
 
 ## License
-
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
-
 Everyone interacting in the Chroma project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/mariochavez/chroma/blob/main/CODE_OF_CONDUCT.md).
