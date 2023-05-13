@@ -13,4 +13,6 @@ gem "standard", "~> 1.3"
 
 gem "rbs", "~> 3.1"
 
+gem "sdoc", "~> 2.6", ">= 2.6.1"
+
 gem "webmock", "~> 3.18", ">= 3.18.1"
