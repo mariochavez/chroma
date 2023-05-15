@@ -32,8 +32,8 @@ collection = Chroma::Resources::Collection.create(collection_name, {lang: "ruby"
 
 # Add embeddings
 embeddings = [
-  Chroma::Resources::Embedding.new(id: "1", embedding: [], metadata: {client: "chroma-rb"}, document: "ruby"),
-  Chroma::Resources::Embedding.new(id: "2", embedding: [], metadata: {client: "chroma-rb"}, document: "rails")
+  Chroma::Resources::Embedding.new(id: "1", embedding: [1.3, 2.6, 3.1], metadata: {client: "chroma-rb"}, document: "ruby"),
+  Chroma::Resources::Embedding.new(id: "2", embedding: [3.7, 2.8, 0.9], metadata: {client: "chroma-rb"}, document: "rails")
 ]
 collection.add(embeddings)
 ```
