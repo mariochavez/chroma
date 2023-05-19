@@ -41,7 +41,7 @@ collection.add(embeddings)
 For a complete example, please refer to the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/blob/main/notebook/Chroma%20Gem.ipynb)
 
 ## Requirements
-- Ruby 3.2 or newer
+- Ruby 2.7.8 or newer
 - Chroma Database 0.3.22 or later running as a client/server model.
 
 ## Installation
