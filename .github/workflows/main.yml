@@ -29,4 +29,4 @@ jobs:
     - name: Nextify gem
       run: bundle exec rake nextify
     - name: Run the default task
-      run: bundle exec rake
+      run: CI=true bundle exec rake
