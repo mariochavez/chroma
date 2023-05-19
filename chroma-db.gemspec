@@ -33,7 +33,12 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency "dry-monads", "~> 1.6"
-  spec.add_dependency "ruby-next-core", "~> 0.15.3"
+
+  if ENV["RELEASING_GEM"].nil? && File.directory?(File.join(__dir__, ".git"))
+    spec.add_runtime_dependency "ruby-next", ">= 0.15.0"
+  else
+    spec.add_dependency "ruby-next-core", ">= 0.15.0"
+  end
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
