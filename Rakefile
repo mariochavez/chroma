@@ -21,3 +21,8 @@ RDoc::Task.new do |rdoc|
   rdoc.options << "--format=sdoc" # explictly set the sdoc generator
   rdoc.template = "rails"         # template used on api.rubyonrails.org
 end
+
+desc "Run Ruby Next nextify"
+task :nextify do
+  sh "bundle exec ruby-next nextify -V"
+end
