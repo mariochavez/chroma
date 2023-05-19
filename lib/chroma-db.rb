@@ -7,6 +7,9 @@ require "json"
 require "logger"
 require "forwardable"
 require "ruby-next"
+require "ruby-next/language/setup"
+
+RubyNext::Language.setup_gem_load_path(transpile: true)
 
 require_relative "chroma/version"
 require_relative "chroma/util"

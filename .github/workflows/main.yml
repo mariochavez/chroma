@@ -26,5 +26,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Nextify gem
+      run: bundle exec rake nextify
     - name: Run the default task
       run: bundle exec rake
