@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Chroma
+    using RubyNext
   module Resources
     # A Collection class represents a store for your embeddings, documents, and any additional metadata.
     # This class can be instantiated by receiving the collection's name and metadata hash.

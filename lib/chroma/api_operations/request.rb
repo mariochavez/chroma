@@ -17,8 +17,6 @@ module Chroma
 
     # Request module provides functionality to perform HTTP requests.
     module Request
-      using RubyNext
-
       module ClassMethods
         include Dry::Monads[:result]
 

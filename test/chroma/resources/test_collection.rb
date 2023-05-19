@@ -3,6 +3,7 @@
 require "test_helper"
 
 class CollectionTest < Minitest::Test
+  using RubyNext
   include StubRequest
 
   def setup
@@ -349,7 +350,7 @@ class CollectionTest < Minitest::Test
   def stub_collection_request(url, method: :get, status: 200, request_body: {}, response_body: {})
     @stubs << stub_request(method, url)
       .with(body: request_body.is_a?(Hash) ? request_body.to_json : request_body)
-      .to_return(status:, body: response_body.to_json, headers: {"Content-Type": "application/json"})
+      .to_return(status: status, body: response_body.to_json, headers: {"Content-Type": "application/json"})
   end
 
   def request_body(attrs = {})

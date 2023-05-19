@@ -9,6 +9,8 @@ on:
 
 jobs:
   build:
+    env:
+      CI: true
     runs-on: ubuntu-latest
     name: Ruby ${{ matrix.ruby }}
     strategy:
@@ -29,4 +31,4 @@ jobs:
     - name: Nextify gem
       run: bundle exec rake nextify
     - name: Run the default task
-      run: CI=true bundle exec rake
+      run: bundle exec rake
