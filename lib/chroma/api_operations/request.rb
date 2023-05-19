@@ -10,10 +10,15 @@ module Chroma
     # body - Parsed JSON object or response body.
     # headers - HTTP response headers.
     # error - Exception or Net::HTTPResponse object if the response is not Net::HTTPSuccess
-    Response = Data.define(:status, :body, :headers, :error)
+    #
+    # NOTE: Not supported yet by Ruby Next
+    # Response = Data.define(:status, :body, :headers, :error)
+    Response = Struct.new("Response", :status, :body, :headers, :error)
 
     # Request module provides functionality to perform HTTP requests.
     module Request
+      using RubyNext
+
       module ClassMethods
         include Dry::Monads[:result]
 
@@ -79,14 +84,14 @@ module Chroma
 
         private def build_response_details(response, exception: false, parse_body: true)
           response_data = Chroma::APIOperations::Response.new(
-            status: exception ? 0 : response.code.to_i,
-            body: if exception
-                    exception.to_s
-                  else
-                    (parse_body ? body_to_json(response.body) : response.body)
-                  end,
-            headers: exception ? {} : response.each_header.to_h,
-            error: response.is_a?(Net::HTTPSuccess) ? nil : response
+            exception ? 0 : response.code.to_i,
+            if exception
+              exception.to_s
+            else
+              (parse_body ? body_to_json(response.body) : response.body)
+            end,
+            exception ? {} : response.each_header.to_h,
+            response.is_a?(Net::HTTPSuccess) ? nil : response
           )
 
           case response
