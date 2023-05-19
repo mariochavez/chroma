@@ -2,6 +2,8 @@
 
 module Chroma
   module APIOperations
+    using RubyNext
+
     # Request's response Data object.
     #
     # status - HTTP status code. It is zero when a request fails due to network error.

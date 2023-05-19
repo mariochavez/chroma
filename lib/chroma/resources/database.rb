@@ -4,6 +4,8 @@ module Chroma
   module Resources
     # The Database class provides methods for interacting with the Chroma database server.
     class Database
+      using RubyNext
+
       include Chroma::APIOperations::Request
       # Get the version of the Chroma database server.
       #

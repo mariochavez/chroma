@@ -6,6 +6,7 @@ require "uri"
 require "json"
 require "logger"
 require "forwardable"
+require "ruby-next"
 
 require_relative "chroma/version"
 require_relative "chroma/util"
