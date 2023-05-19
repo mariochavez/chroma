@@ -40,6 +40,8 @@ Gem::Specification.new do |spec|
     spec.add_dependency "ruby-next-core", ">= 0.15.0"
   end
 
+  spec.add_development_dependency "ruby-next", ">= 0.15.0"
+
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
 end

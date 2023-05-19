@@ -24,5 +24,5 @@ end
 
 desc "Run Ruby Next nextify"
 task :nextify do
-  sh "bundle exec ruby-next nextify -V"
+  sh "bundle exec ruby-next nextify . -V"
 end
