@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
 module Chroma
-    using RubyNext
+  using RubyNext
+
   module Resources
     # A Collection class represents a store for your embeddings, documents, and any additional metadata.
     # This class can be instantiated by receiving the collection's name and metadata hash.
     class Collection
       include Chroma::APIOperations::Request
 
+      attr_reader :id
       attr_reader :name
       attr_reader :metadata
 
-      def initialize(name:, metadata: nil)
+      def initialize(id:, name:, metadata: nil)
+        @id = id
         @name = name
         @metadata = metadata
       end
@@ -40,7 +43,7 @@ module Chroma
           include:
         }
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/query", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/query", payload)
 
         if result.success?
           build_embeddings_response(result.success.body)
@@ -84,7 +87,7 @@ module Chroma
           include:
         }
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/get", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/get", payload)
 
         if result.success?
           build_embeddings_response(result.success.body)
@@ -109,7 +112,7 @@ module Chroma
 
         payload = build_embeddings_payload(embeddings_array)
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/add", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/add", payload)
 
         return true if result.success?
 
@@ -135,7 +138,7 @@ module Chroma
           where_document:
         }
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/delete", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/delete", payload)
 
         return result.success.body if result.success?
 
@@ -159,7 +162,7 @@ module Chroma
         payload = build_embeddings_payload(embeddings_array)
         payload.delete(:increment_index)
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/update", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/update", payload)
 
         return true if result.success?
 
@@ -186,7 +189,7 @@ module Chroma
 
         payload = build_embeddings_payload(embeddings_array)
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/upsert", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/upsert", payload)
 
         return true if result.success?
 
@@ -202,7 +205,7 @@ module Chroma
       #
       # Returns the count of embeddings in the collection.
       def count
-        result = self.class.execute_request(:get, "#{Chroma.api_url}/collections/#{name}/count")
+        result = self.class.execute_request(:get, "#{Chroma.api_url}/collections/#{id}/count")
 
         return result.success.body if result.success?
 
@@ -224,7 +227,7 @@ module Chroma
         payload = {new_name:}
         payload[:new_metadata] = new_metadata if new_metadata.any?
 
-        result = self.class.execute_request(:put, "#{Chroma.api_url}/collections/#{name}", payload)
+        result = self.class.execute_request(:put, "#{Chroma.api_url}/collections/#{id}", payload)
 
         if result.success?
           @name = new_name
@@ -243,7 +246,7 @@ module Chroma
       #
       # Returns true on success or raise a Chroma::Error on failure.
       def create_index
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{name}/create_index")
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/create_index")
 
         return true if result.success?
 
@@ -269,7 +272,7 @@ module Chroma
 
         if result.success?
           data = result.success.body
-          new(name: data["name"], metadata: data["metadata"])
+          new(id: data["id"], name: data["name"], metadata: data["metadata"])
         else
           raise_failure_error(result)
         end
@@ -289,7 +292,7 @@ module Chroma
 
         if result.success?
           data = result.success.body
-          new(name: data["name"], metadata: data["metadata"])
+          new(id: data["id"], name: data["name"], metadata: data["metadata"])
         else
           raise_failure_error(result)
         end
@@ -307,7 +310,7 @@ module Chroma
 
         if result.success?
           data = result.success.body
-          data.map { |item| new(name: item["name"], metadata: item["metadata"]) }
+          data.map { |item| new(id: item["id"], name: item["name"], metadata: item["metadata"]) }
         else
           raise_failure_error(result)
         end
