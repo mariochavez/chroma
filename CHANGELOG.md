@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.4.0] 2023-05-23
+
+- This version implements Chroma's API change where Collection uses its collection id for many operations. Changes in the
+  gem are internals, public API remains the same. Just be aware you need Chroma 0.3.25 or better with this gem version.
+
 ## [0.3.0] 2023-05-19
 
 - Uses Ruby Next to transpile newer Ruby to older Ruby versions in order to support Ruby 2.7, 3.0, and 3.1

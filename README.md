@@ -7,8 +7,7 @@ This Ruby gem is a client to connect to Chroma's database via its API.
 Find more information about Chroma on how to install at their website. [https://www.trychroma.com/](https://www.trychroma.com/)
 
 ## Description
-Chroma-rb is a Ruby client for Chroma Database. It works with version
-0.3.22 or better.
+Chroma-rb is a Ruby client for Chroma Database. It works with version 0.3.22 or better **(Please see requirements below)**.
 
 A small example usage
 
