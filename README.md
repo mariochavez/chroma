@@ -42,7 +42,9 @@ For a complete example, please refer to the Jupyter Noterbook [Chroma gem](https
 
 ## Requirements
 - Ruby 2.7.8 or newer
-- Chroma Database 0.3.22 or later running as a client/server model.
+- Chroma Database 0.3.25 or later running as a client/server model.
+
+For Chroma database 0.3.22 or older, please use version 0.3.0 of this gem.
 
 ## Installation
 To install the gem and add to the application's Gemfile, execute:

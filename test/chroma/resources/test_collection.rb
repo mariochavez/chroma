@@ -72,7 +72,7 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_gets_a_collection
-    body = request_body
+    body = request_body(id: SecureRandom.uuid)
     name = body.fetch(:name)
     metadata = body.fetch(:metadata)
 
@@ -102,7 +102,7 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_gets_a_collection_list
-    body = request_body
+    body = request_body(id: SecureRandom.uuid)
 
     stub_collection_request(
       "#{Chroma.api_url}/collections",
@@ -145,17 +145,18 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_modifies_collection
+    collection_id = SecureRandom.uuid
     body = request_body
     name = body.fetch(:name)
     metadata = body.fetch(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}",
+      "#{Chroma.api_url}/collections/#{collection_id}",
       method: :put,
       request_body: {new_name: "new-collection-name", new_metadata: {source: "test"}}
     )
 
-    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name, metadata: metadata)
 
     deleted = collection.modify("new-collection-name", new_metadata: {source: "test"})
 
@@ -164,17 +165,18 @@ class CollectionTest < Minitest::Test
 
   def test_it_counts_collection_embeddings
     body = request_body
+    collection_id = SecureRandom.uuid
     name = body.fetch(:name)
     metadata = body.fetch(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/count",
+      "#{Chroma.api_url}/collections/#{collection_id}/count",
       method: :get,
       request_body: "",
       response_body: 1
     )
 
-    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name, metadata: metadata)
 
     count = collection.count
 
@@ -192,17 +194,18 @@ class CollectionTest < Minitest::Test
       metadatas: embeddings.map(&:metadata),
       documents: embeddings.map(&:document)
     )
+    collection_id = SecureRandom.uuid
     name = body.delete(:name)
     metadata = body.delete(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/add",
+      "#{Chroma.api_url}/collections/#{collection_id}/add",
       method: :post,
       request_body: body.merge(increment_index: true),
       response_body: true
     )
 
-    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name, metadata: metadata)
 
     added = collection.add(embeddings)
 
@@ -220,17 +223,18 @@ class CollectionTest < Minitest::Test
       metadatas: embeddings.map(&:metadata),
       documents: embeddings.map(&:document)
     )
+    collection_id = SecureRandom.uuid
     name = body.delete(:name)
     metadata = body.delete(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/update",
+      "#{Chroma.api_url}/collections/#{collection_id}/update",
       method: :post,
       request_body: body,
       response_body: true
     )
 
-    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name, metadata: metadata)
 
     updated = collection.update(embeddings)
 
@@ -248,17 +252,18 @@ class CollectionTest < Minitest::Test
       metadatas: embeddings.map(&:metadata),
       documents: embeddings.map(&:document)
     )
+    collection_id = SecureRandom.uuid
     name = body.delete(:name)
     metadata = body.delete(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/upsert",
+      "#{Chroma.api_url}/collections/#{collection_id}/upsert",
       method: :post,
       request_body: body.merge(increment_index: true),
       response_body: true
     )
 
-    collection = Chroma::Resources::Collection.new(name: name, metadata: metadata)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name, metadata: metadata)
 
     upserted = collection.upsert(embeddings)
 
@@ -280,10 +285,11 @@ class CollectionTest < Minitest::Test
       where_document: {},
       include: %w[metadatas documents]
     }
+    collection_id = SecureRandom.uuid
     name = "test-collection"
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/get",
+      "#{Chroma.api_url}/collections/#{collection_id}/get",
       method: :post,
       request_body: body,
       response_body: {
@@ -294,7 +300,7 @@ class CollectionTest < Minitest::Test
       }
     )
 
-    collection = Chroma::Resources::Collection.new(name: name)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name)
 
     result_embeddings = collection.get(ids: body.fetch(:ids))
 
@@ -313,16 +319,17 @@ class CollectionTest < Minitest::Test
       where: {},
       where_document: {}
     }
+    collection_id = SecureRandom.uuid
     name = "test-collection"
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/delete",
+      "#{Chroma.api_url}/collections/#{collection_id}/delete",
       method: :post,
       request_body: body,
       response_body: ["7d993230-c215-40c3-ad23-d8a80bcffca1", "28b1da30-6fab-4cce-9969-3f3fed24df0a"]
     )
 
-    collection = Chroma::Resources::Collection.new(name: name)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name)
 
     deleted_embeddings = collection.delete(ids: body.fetch(:ids))
 
@@ -330,16 +337,17 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_create_an_index_for_a_collection
+    collection_id = SecureRandom.uuid
     name = "test-collection"
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}/create_index",
+      "#{Chroma.api_url}/collections/#{collection_id}/create_index",
       method: :post,
       request_body: "",
       response_body: true
     )
 
-    collection = Chroma::Resources::Collection.new(name: name)
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name)
     result = collection.create_index
 
     assert result
