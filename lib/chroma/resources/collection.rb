@@ -298,6 +298,31 @@ module Chroma
         end
       end
 
+      # Get or create a collection on the database.
+      #
+      # name - The name of the collection. Name needs to be between 3-63 characters, starts and ends
+      #   with an alphanumeric character, contains only alphanumeric characters, underscores or hyphens (-), and
+      #   contains no two consecutive periods
+      # metadata - A hash of additional metadata associated with the collection, this is used if collection is created.
+      #
+      # Examples
+      #
+      #   collection = Chorma::Resources::Collection.get_or_create("ruby-documentation", {source: "Ruby lang website"})
+      #
+      # Returns the created collection object.
+      def self.get_or_create(name, metadata = nil)
+        payload = {name:, metadata:, get_or_create: true}
+
+        result = execute_request(:post, "#{Chroma.api_url}/collections", payload)
+
+        if result.success?
+          data = result.success.body
+          new(id: data["id"], name: data["name"], metadata: data["metadata"])
+        else
+          raise_failure_error(result)
+        end
+      end
+
       # Retrieves all collections in the database.
       #
       # Examples
