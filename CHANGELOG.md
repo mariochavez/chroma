@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.5.0] 2023-05-26
+
+- Adds method `get_or_create` to Collection class.
+
 ## [0.4.0] 2023-05-23
 
 - This version implements Chroma's API change where Collection uses its collection id for many operations. Changes in the
