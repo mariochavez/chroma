@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.6.0] 2023-06-05
+
+- Fix failure to rescue from API call exceptions.
+- Fix embedding loading into Embedding resource.
+
 ## [0.5.0] 2023-05-26
 
 - Adds method `get_or_create` to Collection class.
