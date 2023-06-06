@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chroma-db (0.5.0)
+    chroma-db (0.6.0)
       dry-monads (~> 1.6)
       ruby-next (>= 0.15.0)
 
