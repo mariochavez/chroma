@@ -48,7 +48,7 @@ module Chroma
         if result.success?
           build_embeddings_response(result.success.body)
         else
-          raise_failure_error(result)
+          self.class.raise_failure_error(result)
         end
       end
 
@@ -92,7 +92,7 @@ module Chroma
         if result.success?
           build_embeddings_response(result.success.body)
         else
-          raise_failure_error(result)
+          self.class.raise_failure_error(result)
         end
       end
 
@@ -116,7 +116,7 @@ module Chroma
 
         return true if result.success?
 
-        raise_failure_error(result)
+        self.class.raise_failure_error(result)
       end
 
       # Delete embeddings from the collection.
@@ -142,7 +142,7 @@ module Chroma
 
         return result.success.body if result.success?
 
-        raise_failure_error(result)
+        self.class.raise_failure_error(result)
       end
 
       # Update one or many embeddings to the collection.
@@ -166,7 +166,7 @@ module Chroma
 
         return true if result.success?
 
-        raise_failure_error(result)
+        self.class.raise_failure_error(result)
       end
 
       # Upsert (insert or update) one or many embeddings to the collection.
@@ -177,8 +177,8 @@ module Chroma
       #
       #   collection = Chroma::Resource::Collection.get("ruby-documentation")
       #   embeddings = [
-      #     Embedding.new(id: "Array#fetch", embeddings[9.8, 2.3, 2.9], metadata: {url: "https://..."}),
-      #     Embedding.new(id: "Array#select", embeddings[5.6, 3.1, 4.7], metadata: {url: "https://..."})
+      #     Embedding.new(id: "Array#fetch", embeddings: [9.8, 2.3, 2.9], metadata: {url: "https://..."}),
+      #     Embedding.new(id: "Array#select", embeddings: [5.6, 3.1, 4.7], metadata: {url: "https://..."})
       #   ]
       #   collection.upsert()
       #
@@ -193,7 +193,7 @@ module Chroma
 
         return true if result.success?
 
-        raise_failure_error(result)
+        self.class.raise_failure_error(result)
       end
 
       # Count the number of embeddings in a collection.
@@ -209,7 +209,7 @@ module Chroma
 
         return result.success.body if result.success?
 
-        raise_failure_error(result)
+        self.class.raise_failure_error(result)
       end
 
       # Modify the name and metadata of the current collection.
@@ -233,7 +233,7 @@ module Chroma
           @name = new_name
           @metadata = new_metadata
         else
-          raise_failure_error(result)
+          self.class.raise_failure_error(result)
         end
       end
 
@@ -250,7 +250,7 @@ module Chroma
 
         return true if result.success?
 
-        raise_failure_error(result)
+        self.class.raise_failure_error(result)
       end
 
       # Create a new collection on the database.
@@ -372,7 +372,6 @@ module Chroma
           raise Chroma::APIError.new(result.failure.body, status: result.failure.status, body: result.failure.body)
         end
       end
-      private_class_method :raise_failure_error
 
       private
 
@@ -393,7 +392,7 @@ module Chroma
         Chroma::Util.log_debug("Building embeddings from #{result.inspect}")
 
         result_ids = result.fetch("ids", []).flatten
-        result_embeddings = (result.dig("embeddings") || []).flatten
+        result_embeddings = result.dig("embeddings") || []
         result_documents = (result.dig("documents") || []).flatten
         result_metadatas = (result.dig("metadatas") || []).flatten
         result_distances = (result.dig("distances") || []).flatten

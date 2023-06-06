@@ -63,7 +63,7 @@ module Chroma
     def self.log_internal(message, data = {}, level:, logger:)
       data_str = data.reject { |_k, v| v.nil? }.map { |(k, v)| "#{k}=#{v}" }.join(" ")
 
-      logger&.log(level, "message=#{message} #{data_str}".strip)
+      logger&.add(level, "message=#{message} #{data_str}".strip)
     end
     private_class_method :log_internal
   end
