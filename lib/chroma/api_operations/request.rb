@@ -44,7 +44,7 @@ module Chroma
 
           request = build_request(method, uri, params)
 
-          use_ssl = options.delete(:use_ssl) || false
+          use_ssl = uri.scheme == "https"
           response = Net::HTTP.start(uri.hostname, uri.port, use_ssl:) do |http|
             Chroma::Util.log_debug("Sending a request", {method:, uri:, params:})
             http.request(request)
@@ -117,6 +117,7 @@ module Chroma
 
           request.content_type = "application/json"
           request.body = params.to_json if params.size > 0
+          request.basic_auth(uri.user, uri.password) if uri.user.present?
 
           request
         end
