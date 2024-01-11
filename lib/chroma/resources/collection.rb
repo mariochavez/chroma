@@ -180,7 +180,7 @@ module Chroma
       #     Embedding.new(id: "Array#fetch", embeddings: [9.8, 2.3, 2.9], metadata: {url: "https://..."}),
       #     Embedding.new(id: "Array#select", embeddings: [5.6, 3.1, 4.7], metadata: {url: "https://..."})
       #   ]
-      #   collection.upsert()
+      #   collection.upsert(embeddings)
       #
       # Returns true with success or raises a Chroma::Error on failure.
       def upsert(embeddings = [])
