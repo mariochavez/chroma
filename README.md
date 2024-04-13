@@ -41,7 +41,7 @@ For a complete example, please refer to the Jupyter Noterbook [Chroma gem](https
 
 ## Requirements
 - Ruby 2.7.8 or newer
-- Chroma Database 0.3.25 or later running as a client/server model.
+- Chroma Database 0.4.24 or later running as a client/server model.
 
 For Chroma database 0.3.22 or older, please use version 0.3.0 of this gem.
 
@@ -61,6 +61,7 @@ To use the Jupyter Noterbook [Chroma gem](https://github.com/mariochavez/chroma/
     $ gem install iruby
     $ iruby register --force
 
+**NOTE: ** Notebook has an example on how to create embeddings using [Ollama](https://ollama.com) and [Nomic embed text](https://ollama.com/library/nomic-embed-text) with a simple Ruby HTTP client.
 ## Development 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment. 
 
@@ -68,6 +69,8 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 
 To generate Rdoc documentation for the gem, run `bundle exec rake rdoc`.
 
+## Rails integration
+If you are looking for a solution to embed your ActiveRecord models into ChromaDB, look at [Cromable gem](https://github.com/AliOsm/chromable)
 ## Contributing
 Bug reports and pull requests are welcome on GitHub at https://github.com/mariochavez/chroma. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/mariochavez/chroma/blob/main/CODE_OF_CONDUCT.md). 
 

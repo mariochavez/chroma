@@ -29,17 +29,6 @@ module Chroma
         raise_failure_error(result)
       end
 
-      # Persist Chroma database data.
-      #
-      # Resturn true on success or raise a Chroma::Error on failure.
-      def self.persist
-        result = execute_request(:post, "#{Chroma.api_url}/persist")
-
-        return result.success.body if result.success?
-
-        raise_failure_error(result)
-      end
-
       # Check the heartbeat of the Chroma database server.
       #
       # Return a Hash with a timestamp.

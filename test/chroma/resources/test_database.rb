@@ -35,14 +35,6 @@ class DatabaseTest < Minitest::Test
     assert_equal({"nanosecond heartbeat" => 1683757215667247439000}, heartbeat)
   end
 
-  def test_it_persist_database_server_data
-    @stubs << stub_request(:post, "#{Chroma.api_url}/persist").to_return(status: 200, body: "true", headers: {"Content-Type": "application/text"})
-
-    persisted = Chroma::Resources::Database.persist
-
-    assert persisted
-  end
-
   def test_it_resets_database_server_data
     @stubs << stub_request(:post, "#{Chroma.api_url}/reset").to_return(status: 200, body: "true", headers: {"Content-Type": "application/text"})
 

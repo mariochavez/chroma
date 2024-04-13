@@ -336,23 +336,6 @@ class CollectionTest < Minitest::Test
     assert_equal 2, deleted_embeddings.size
   end
 
-  def test_it_create_an_index_for_a_collection
-    collection_id = SecureRandom.uuid
-    name = "test-collection"
-
-    stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/create_index",
-      method: :post,
-      request_body: "",
-      response_body: true
-    )
-
-    collection = Chroma::Resources::Collection.new(id: collection_id, name: name)
-    result = collection.create_index
-
-    assert result
-  end
-
   private
 
   def stub_collection_request(url, method: :get, status: 200, request_body: {}, response_body: {})

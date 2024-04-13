@@ -237,22 +237,6 @@ module Chroma
         end
       end
 
-      # Creates an index for the collection.
-      #
-      # Examples:
-      #
-      #   collection = Chroma::Resource::Collection.get("ruby-documentation")
-      #   collection.create_index
-      #
-      # Returns true on success or raise a Chroma::Error on failure.
-      def create_index
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/create_index")
-
-        return true if result.success?
-
-        self.class.raise_failure_error(result)
-      end
-
       # Create a new collection on the database.
       #
       # name - The name of the collection. Name needs to be between 3-63 characters, starts and ends
