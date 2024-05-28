@@ -118,8 +118,7 @@ module Chroma
           request.content_type = "application/json"
           request.body = params.to_json if params.size > 0
           request.basic_auth(uri.user, uri.password) if !uri.user.nil?
-
-          request
+          request['X-Chroma-Token'] = ENV.fetch('CHROMA_SERVER_AUTHN_CREDENTIALS', nil) if ENV.fetch('CHROMA_SERVER_AUTHN_CREDENTIALS', nil)
         end
       end
 
