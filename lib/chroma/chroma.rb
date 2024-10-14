@@ -6,6 +6,9 @@ module Chroma
   LEVEL_ERROR = Logger::ERROR
   LEVEL_INFO = Logger::INFO
 
+  DEFAULT_TENANT = 'default_tenant'
+  DEFAULT_DATABASE = 'default_database'
+
   @config = Chroma::ChromaConfiguration.setup
 
   class << self
@@ -19,10 +22,29 @@ module Chroma
     def_delegators :@config, :api_version, :api_version=
     def_delegators :@config, :log_level, :log_level=
     def_delegators :@config, :logger, :logger=
+    def_delegators :@config, :tenant, :tenant=
+    def_delegators :@config, :database, :database=
+    def_delegators :@config, :api_key, :api_key=
+  end
+
+  def tenant
+    @config.tenant || DEFAULT_TENANT
+  end
+
+  def database
+    @config.database || DEFAULT_DATABASE
   end
 
   def self.api_url
-    "#{connect_host}/#{api_base}/#{api_version}"
+    base_url = "#{connect_host}/#{api_base}/#{api_version}"
+    uri = URI(base_url)
+    query_params = {
+      tenant: tenant,
+      database: database
+    }
+    query_params['x-chroma-token'] = api_key if include_api_key && api_key
+    uri.query = URI.encode_www_form(query_params)
+    uri.to_s
   end
 
   Chroma.log_level = ENV["CHROMA_LOG"].to_i unless ENV["CHROMA_LOG"].nil?

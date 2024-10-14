@@ -26,6 +26,33 @@ module Chroma
     # Returns the String host name.
     attr_accessor :connect_host
 
+    # Sets the tenant for the Chroma service, Defaults to 'default_tenant'.
+    # 
+    # Examples
+    #
+    #   config.tenant = "my_tenant"
+    #
+    # Returns the String tenant.
+    attr_accessor :tenant
+
+    # Sets the database for the Chroma service, Defaults to 'default_database'.
+    # 
+    # Examples
+    #
+    #   config.database = "my_database"
+    #
+    # Returns the String database.
+    attr_accessor :database
+
+    # Sets the API Key for the Chroma service, for `x-chroma-token` header.
+    # 
+    # Examples
+    #
+    #   config.api_key = "1234abcd"
+    #
+    # Returns the String database.
+    attr_accessor :api_key
+
     # Sets the base path for the Chroma API.
     #
     # Examples
