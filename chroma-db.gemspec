@@ -14,8 +14,6 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.7.8"
 
-  # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
-
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/mariochavez/chroma"
   spec.metadata["changelog_uri"] = "https://github.com/mariochavez/chroma/blob/main/CHANGELOG.md"
@@ -36,12 +34,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "dry-monads", "~> 1.6"
 
   if ENV["RELEASING_GEM"].nil? && File.directory?(File.join(__dir__, ".git"))
-    spec.add_runtime_dependency "ruby-next", ">= 0.15.0"
+    spec.add_runtime_dependency "ruby-next", "~> 1.0", ">= 1.0.3"
   else
-    spec.add_dependency "ruby-next-core", ">= 0.15.0"
+    spec.add_dependency "ruby-next-core", "~> 1.0", ">= 1.0.3"
   end
 
-  spec.add_development_dependency "ruby-next", ">= 0.15.0"
+  spec.add_development_dependency "ruby-next", "~> 1.0", ">= 1.0.3"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

@@ -27,7 +27,7 @@ module Chroma
     attr_accessor :connect_host
 
     # Sets the tenant for the Chroma service, Defaults to 'default_tenant'.
-    # 
+    #
     # Examples
     #
     #   config.tenant = "my_tenant"
@@ -36,7 +36,7 @@ module Chroma
     attr_accessor :tenant
 
     # Sets the database for the Chroma service, Defaults to 'default_database'.
-    # 
+    #
     # Examples
     #
     #   config.database = "my_database"
@@ -45,7 +45,7 @@ module Chroma
     attr_accessor :database
 
     # Sets the API Key for the Chroma service, for `x-chroma-token` header.
-    # 
+    #
     # Examples
     #
     #   config.api_key = "1234abcd"
@@ -97,6 +97,9 @@ module Chroma
       @api_version = "v1"
 
       @log_level = Chroma::LEVEL_INFO
+
+      @tenant ||= "default_tenant"
+      @database ||= "default_database"
     end
   end
 end
