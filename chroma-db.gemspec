@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Chroma is the open-source embedding database. Chroma makes it easy to build LLM apps by making knowledge, facts, and skills pluggable for LLMs."
   spec.homepage = "https://mariochavez.io"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.7.8"
+  spec.required_ruby_version = ">= 3.0.6"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/mariochavez/chroma"
