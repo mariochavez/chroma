@@ -52,8 +52,6 @@ Chroma.tenant = "my_tenant"     # Optional
 Chroma.database = "my_database" # Optional
 ```
 
-```
-
 ## Requirements
 
 - Ruby 3.0.6 or newer
@@ -104,4 +102,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## Code of Conduct
 
 Everyone interacting in the Chroma project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/mariochavez/chroma/blob/main/CODE_OF_CONDUCT.md).
+
+```
+
 ```
