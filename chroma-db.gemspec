@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Chroma is the open-source embedding database. Chroma makes it easy to build LLM apps by making knowledge, facts, and skills pluggable for LLMs."
   spec.homepage = "https://mariochavez.io"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.0.6"
+  spec.required_ruby_version = ">= 3.1.4"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/mariochavez/chroma"
@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency "dry-monads", "~> 1.6"
+  spec.add_dependency "zeitwerk", "~> 2.6.0"
 
   if ENV["RELEASING_GEM"].nil? && File.directory?(File.join(__dir__, ".git"))
     spec.add_runtime_dependency "ruby-next", "~> 1.0", ">= 1.0.3"

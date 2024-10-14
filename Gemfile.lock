@@ -4,6 +4,7 @@ PATH
     chroma-db (0.8.0)
       dry-monads (~> 1.6)
       ruby-next (~> 1.0, >= 1.0.3)
+      zeitwerk (~> 2.6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -96,7 +97,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    zeitwerk (2.7.0)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   arm64-darwin-22
