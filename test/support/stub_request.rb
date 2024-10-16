@@ -27,7 +27,15 @@ module StubRequest
     @stubs << stub_request(:any, url).to_timeout
   end
 
-  def stub_successful_request(url)
-    @stubs << stub_request(:any, url).to_return(status: 200, body: %({"name": "data-index"}), headers: {"Content-Type": "application/json"})
+  def stub_successful_request(url, query = {})
+    @stubs << if query.empty?
+      stub_request(:any, url)
+        .to_return(status: 200, body: %({"name": "data-index"}), headers: {"Content-Type": "application/json"})
+    else
+      api_key = query.delete(:"X-Chroma-Token")
+      stub_request(:any, url)
+        .with(query: hash_including(query), headers: {"X-Chroma-Token": api_key})
+        .to_return(status: 200, body: %({"name": "data-index"}), headers: {"Content-Type": "application/json"})
+    end
   end
 end

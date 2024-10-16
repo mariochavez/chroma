@@ -38,6 +38,27 @@ class ChromaTest < Minitest::Test
     assert_equal("https://chroma-server.org/other/api/v2", Chroma.api_url)
   end
 
+  def test_it_allows_to_set_api_key
+    api_key = "1234abcd"
+    Chroma.api_key = api_key
+
+    assert_equal(api_key, Chroma.api_key)
+  end
+
+  def test_it_allows_to_set_tenant_and_database
+    assert_equal("default_tenant", Chroma.tenant)
+    assert_equal("default_database", Chroma.database)
+
+    tenant = "test_tenant"
+    database = "test_database"
+
+    Chroma.tenant = tenant
+    Chroma.database = database
+
+    assert_equal(tenant, Chroma.tenant)
+    assert_equal(database, Chroma.database)
+  end
+
   def test_it_allows_log_level_configuration
     Chroma.log_level = 0
     assert_equal ::Logger::DEBUG, Chroma.log_level
@@ -47,13 +68,6 @@ class ChromaTest < Minitest::Test
     logger = Object.new
     Chroma.logger = logger
     assert_equal logger, Chroma.logger
-  end
-
-  def test_it_sets_default_database_and_tenant_when_api_key_is_set
-    Chroma.connect_host = "https://chroma-server.org"
-    Chroma.api_key = "1234abcd"
-
-    assert_equal("https://chroma-server.org/api/v1?tenant=default_tenant&database=default_database&x-chroma-token=1234abcd", Chroma.api_url)
   end
 
   def test_it_sets_default_database_and_tenant_when_api_key_is_not_set

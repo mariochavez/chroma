@@ -7,6 +7,8 @@
 /spec/reports/
 /tmp/
 
+/test/hosted.rb
+
 .rbnext/
 
 .rubocop.yml

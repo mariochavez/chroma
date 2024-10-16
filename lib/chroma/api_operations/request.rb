@@ -94,9 +94,9 @@ module Chroma
 
           case response
           in Net::HTTPSuccess
-            return Success(response_data)
+            Success(response_data)
           else
-            return Failure(response_data)
+            Failure(response_data)
           end
         end
 
@@ -107,6 +107,8 @@ module Chroma
         end
 
         private def build_request(method, uri, params)
+          uri.query = URI.encode_www_form(tenant: Chroma.tenant, database: Chroma.database) unless Chroma.api_key.nil?
+
           request = case method
           when :post then Net::HTTP::Post.new(uri)
           when :put then Net::HTTP::Put.new(uri)
@@ -115,10 +117,11 @@ module Chroma
             Net::HTTP::Get.new(uri)
           end
 
+          api_key = ENV.fetch("CHROMA_SERVER_AUTHN_CREDENTIALS", Chroma.api_key)
           request.content_type = "application/json"
           request.body = params.to_json if params.size > 0
           request.basic_auth(uri.user, uri.password) if !uri.user.nil?
-          request['X-Chroma-Token'] = ENV.fetch('CHROMA_SERVER_AUTHN_CREDENTIALS', nil) if ENV.fetch('CHROMA_SERVER_AUTHN_CREDENTIALS', nil)
+          request["X-Chroma-Token"] = api_key unless api_key.nil?
           request
         end
       end
