@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 0.8.1 2024-10-16
+
+- Adds support for Chroma hosted service. See README for more details how to set your `api_key`, `tenant`, and `database`.
+
 ## [0.6.0] 2023-06-05
 
 - Fix failure to rescue from API call exceptions.

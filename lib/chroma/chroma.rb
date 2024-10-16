@@ -25,18 +25,7 @@ module Chroma
   end
 
   def self.api_url
-    base_url = "#{connect_host}/#{api_base}/#{api_version}"
-    uri = URI(base_url)
-
-    unless api_key.nil?
-      query_params = {
-        tenant: tenant,
-        database: database
-      }
-      query_params["x-chroma-token"] = api_key
-      uri.query = URI.encode_www_form(query_params)
-    end
-    uri.to_s
+    "#{connect_host}/#{api_base}/#{api_version}"
   end
 
   Chroma.log_level = ENV["CHROMA_LOG"].to_i unless ENV["CHROMA_LOG"].nil?

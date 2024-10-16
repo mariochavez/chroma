@@ -76,4 +76,16 @@ class RequestTest < Minitest::Test
     assert response.success?
     assert_equal(200, response.success.status)
   end
+
+  def test_it_adds_api_key_to_request
+    Chroma.api_key = "1234abcd"
+
+    url = "#{@url}/collection"
+    stub_successful_request(url, {tenant: Chroma.tenant, database: Chroma.database, "X-Chroma-Token": Chroma.api_key})
+    subject = Class.new.include(Chroma::APIOperations::Request)
+
+    response = subject.execute_request(:get, url)
+
+    assert response.success?
+  end
 end
