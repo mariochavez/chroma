@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 0.8.2 2024-10-16
+
+- Fixes API change in Collection#query method. Parameters `where` and `where_document` are now optional.
+
 ## 0.8.1 2024-10-16
 
 - Adds support for Chroma hosted service. See README for more details how to set your `api_key`, `tenant`, and `database`.
