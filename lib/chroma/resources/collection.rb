@@ -34,7 +34,7 @@ module Chroma
       #   embeddings = collection.query(query_embeddings: [[1.5, 2.9, 3.3]], results: 5)
       #
       # Return an Array of Embedding with query results.
-      def query(query_embeddings:, results: 10, where: {}, where_document: {}, include: %w[metadatas documents distances])
+      def query(query_embeddings:, results: 10, where: nil, where_document: nil, include: %w[metadatas documents distances])
         payload = {
           query_embeddings:,
           n_results: results,
@@ -42,6 +42,8 @@ module Chroma
           where_document:,
           include:
         }
+
+        payload.delete_if { |_key, value| value.nil? }
 
         result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/query", payload)
 
