@@ -47,6 +47,7 @@ options, you can set the `api_key` to use the hosted service. Also, you can set 
 the hosted service, by default they are set to `default_tenant` and `default_database`.
 
 ```ruby
+Chroma.connect_host = "https://api.trychroma.com:8000"
 Chroma.api_key = "cd75e50bf8213fb7ce57c05b"
 Chroma.tenant = "my_tenant"     # Optional
 Chroma.database = "my_database" # Optional
