@@ -45,7 +45,7 @@ module Chroma
 
         payload.delete_if { |_key, value| value.nil? }
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/query", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/query", payload)
 
         if result.success?
           build_embeddings_response(result.success.body)
@@ -89,7 +89,7 @@ module Chroma
           include:
         }
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/get", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/get", payload)
 
         if result.success?
           build_embeddings_response(result.success.body)
@@ -114,7 +114,7 @@ module Chroma
 
         payload = build_embeddings_payload(embeddings_array)
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/add", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/add", payload)
 
         return true if result.success?
 
@@ -140,11 +140,34 @@ module Chroma
           where_document:
         }
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/delete", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/delete", payload)
 
         return result.success.body if result.success?
 
         self.class.raise_failure_error(result)
+      end
+
+      # Fork an existing collection.
+      #
+      # new_name [String] The new name of the collection (optional).
+      #
+      # Examples
+      #
+      #   collection = Chroma::Resource::Collection.get("ruby-documentation")
+      #   new_collection = collection.fork("new_collection_name")
+      #
+      # Returns a new collection with the specified name and containing identical data to the current collection.
+      def fork(new_name)
+        payload = {new_name: new_name}
+
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/fork", payload)
+
+        if result.success?
+          data = result.success.body
+          self.class.new(id: data["id"], name: new_name, metadata: data["metadata"])
+        else
+          self.class.raise_failure_error(result)
+        end
       end
 
       # Update one or many embeddings to the collection.
@@ -164,7 +187,7 @@ module Chroma
         payload = build_embeddings_payload(embeddings_array)
         payload.delete(:increment_index)
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/update", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/update", payload)
 
         return true if result.success?
 
@@ -191,7 +214,7 @@ module Chroma
 
         payload = build_embeddings_payload(embeddings_array)
 
-        result = self.class.execute_request(:post, "#{Chroma.api_url}/collections/#{id}/upsert", payload)
+        result = self.class.execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/upsert", payload)
 
         return true if result.success?
 
@@ -207,7 +230,7 @@ module Chroma
       #
       # Returns the count of embeddings in the collection.
       def count
-        result = self.class.execute_request(:get, "#{Chroma.api_url}/collections/#{id}/count")
+        result = self.class.execute_request(:get, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}/count")
 
         return result.success.body if result.success?
 
@@ -229,7 +252,7 @@ module Chroma
         payload = {new_name:}
         payload[:new_metadata] = new_metadata if new_metadata.any?
 
-        result = self.class.execute_request(:put, "#{Chroma.api_url}/collections/#{id}", payload)
+        result = self.class.execute_request(:put, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{id}", payload)
 
         if result.success?
           @name = new_name
@@ -254,7 +277,7 @@ module Chroma
       def self.create(name, metadata = nil)
         payload = {name:, metadata:, get_or_create: false}
 
-        result = execute_request(:post, "#{Chroma.api_url}/collections", payload)
+        result = execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections", payload)
 
         if result.success?
           data = result.success.body
@@ -274,7 +297,7 @@ module Chroma
       #
       # Returns The retrieved collection object. Raises Chroma::InvalidRequestError if not found.
       def self.get(name)
-        result = execute_request(:get, "#{Chroma.api_url}/collections/#{name}")
+        result = execute_request(:get, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{name}")
 
         if result.success?
           data = result.success.body
@@ -299,7 +322,7 @@ module Chroma
       def self.get_or_create(name, metadata = nil)
         payload = {name:, metadata:, get_or_create: true}
 
-        result = execute_request(:post, "#{Chroma.api_url}/collections", payload)
+        result = execute_request(:post, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections", payload)
 
         if result.success?
           data = result.success.body
@@ -317,7 +340,7 @@ module Chroma
       #
       # Returns An array of all collections in the database.
       def self.list
-        result = execute_request(:get, "#{Chroma.api_url}/collections")
+        result = execute_request(:get, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections")
 
         if result.success?
           data = result.success.body
@@ -337,14 +360,29 @@ module Chroma
       #
       # Returns true if the collection was successfully deleted, raise Chroma::InvalidRequestError otherwise.
       def self.delete(name)
-        result = execute_request(:delete, "#{Chroma.api_url}/collections/#{name}")
+        result = execute_request(:delete, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{name}")
 
         return true if result.success?
 
         raise_failure_error(result)
       end
 
-      def self.raise_failure_error(result)
+      # Count the total number of collections in a given database.
+      #
+      # Examples
+      #
+      #   Chroma::Resource::Collection.collections_count
+      #
+      # Returns the count of collections in the database.
+      def self.collections_count
+        result = execute_request(:get, "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections_count")
+
+        return result.success.body if result.success?
+
+        raise_failure_error(result)
+      end
+
+      def self.raise_failure_error1(result)
         case result.failure.error
         in Exception => exception
           raise Chroma::APIConnectionError.new(exception.message)

@@ -26,7 +26,7 @@ class CollectionTest < Minitest::Test
     metadata = body.fetch(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections",
       method: :post,
       request_body: body.merge(get_or_create: false),
       response_body: body
@@ -40,7 +40,7 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_raises_api_connection_error_with_network_problems_create_collection
-    stub_network_error("#{Chroma.api_url}/collections")
+    stub_network_error("#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections")
 
     assert_raises Chroma::APIConnectionError do
       Chroma::Resources::Collection.create("test-collection", {source: "test"})
@@ -48,7 +48,10 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_raises_invalid_request_error_with_invalid_parameters_create_collection
-    stub_server_error("#{Chroma.api_url}/collections", %({"error":"ValueError('Expected collection name that (1) contains 3-63 characters, (2) starts and ends with an alphanumeric character, (3) otherwise contains only alphanumeric characters, underscores or hyphens (-), (4) contains no two consecutive periods (..) and (5) is not a valid IPv4 address, got ruby-index-4 invalid')"}))
+    stub_server_error(
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections",
+      %({"error":"ValueError('Expected collection name that (1) contains 3-63 characters, (2) starts and ends with an alphanumeric character, (3) otherwise contains only alphanumeric characters, underscores or hyphens (-), (4) contains no two consecutive periods (..) and (5) is not a valid IPv4 address, got ruby-index-4 invalid')"})
+    )
 
     assert_raises Chroma::InvalidRequestError do
       Chroma::Resources::Collection.create("test-collection", {source: "test"})
@@ -56,7 +59,7 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_raises_api_connection_error_with_server_problems_create_collection
-    stub_server_error("#{Chroma.api_url}/collections")
+    stub_server_error("#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections")
 
     assert_raises Chroma::APIConnectionError do
       Chroma::Resources::Collection.create("test-collection", {source: "test"})
@@ -64,7 +67,7 @@ class CollectionTest < Minitest::Test
   end
 
   def test_it_raises_api_error_create_collection
-    stub_client_error("#{Chroma.api_url}/collections")
+    stub_client_error("#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections")
 
     assert_raises Chroma::APIError do
       Chroma::Resources::Collection.create("test-collection", {source: "test"})
@@ -77,7 +80,7 @@ class CollectionTest < Minitest::Test
     metadata = body.fetch(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{name}",
       method: :get,
       request_body: "",
       response_body: body
@@ -94,7 +97,10 @@ class CollectionTest < Minitest::Test
     body = request_body
     name = body.fetch(:name)
 
-    stub_server_error("#{Chroma.api_url}/collections/#{name}", %({"error"=>"ValueError('Collection #{name} does not exist')"}))
+    stub_server_error(
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{name}",
+      %({"error"=>"ValueError('Collection #{name} does not exist')"})
+    )
 
     assert_raises Chroma::InvalidRequestError do
       Chroma::Resources::Collection.get("test-collection")
@@ -105,7 +111,7 @@ class CollectionTest < Minitest::Test
     body = request_body(id: SecureRandom.uuid)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections",
       method: :get,
       request_body: "",
       response_body: [body]
@@ -122,7 +128,7 @@ class CollectionTest < Minitest::Test
     name = body.fetch(:name)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{name}",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{name}",
       method: :delete,
       request_body: "",
       response_body: [body]
@@ -133,11 +139,27 @@ class CollectionTest < Minitest::Test
     assert deleted
   end
 
+  def test_it_counts_collection
+    stub_collection_request(
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections_count",
+      method: :get,
+      request_body: "",
+      response_body: 1
+    )
+
+    collections_count = Chroma::Resources::Collection.collections_count
+
+    assert_equal 1, collections_count
+  end
+
   def test_it_raises_invalid_request_error_deleting_not_existing_collection
     body = request_body
     name = body.fetch(:name)
 
-    stub_server_error("#{Chroma.api_url}/collections/#{name}", %({"error"=>"IndexError('list index out of range')"}))
+    stub_server_error(
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{name}",
+      %({"error"=>"IndexError('list index out of range')"})
+    )
 
     assert_raises Chroma::InvalidRequestError do
       Chroma::Resources::Collection.delete("test-collection")
@@ -151,7 +173,7 @@ class CollectionTest < Minitest::Test
     metadata = body.fetch(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}",
       method: :put,
       request_body: {new_name: "new-collection-name", new_metadata: {source: "test"}}
     )
@@ -170,7 +192,7 @@ class CollectionTest < Minitest::Test
     metadata = body.fetch(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/count",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/count",
       method: :get,
       request_body: "",
       response_body: 1
@@ -199,7 +221,7 @@ class CollectionTest < Minitest::Test
     metadata = body.delete(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/add",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/add",
       method: :post,
       request_body: body.merge(increment_index: true),
       response_body: true
@@ -228,7 +250,7 @@ class CollectionTest < Minitest::Test
     metadata = body.delete(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/update",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/update",
       method: :post,
       request_body: body,
       response_body: true
@@ -257,7 +279,7 @@ class CollectionTest < Minitest::Test
     metadata = body.delete(:metadata)
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/upsert",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/upsert",
       method: :post,
       request_body: body.merge(increment_index: true),
       response_body: true
@@ -289,7 +311,7 @@ class CollectionTest < Minitest::Test
     name = "test-collection"
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/get",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/get",
       method: :post,
       request_body: body,
       response_body: {
@@ -323,7 +345,7 @@ class CollectionTest < Minitest::Test
     name = "test-collection"
 
     stub_collection_request(
-      "#{Chroma.api_url}/collections/#{collection_id}/delete",
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/delete",
       method: :post,
       request_body: body,
       response_body: ["7d993230-c215-40c3-ad23-d8a80bcffca1", "28b1da30-6fab-4cce-9969-3f3fed24df0a"]
@@ -334,6 +356,29 @@ class CollectionTest < Minitest::Test
     deleted_embeddings = collection.delete(ids: body.fetch(:ids))
 
     assert_equal 2, deleted_embeddings.size
+  end
+
+  def test_it_forks_embeddings_from_collection
+    new_name = "new-collection-name"
+    body = {
+      new_name: new_name
+    }
+    collection_id = SecureRandom.uuid
+    name = "test-collection"
+
+    stub_collection_request(
+      "#{Chroma.api_url}/tenants/#{Chroma.tenant}/databases/#{Chroma.database}/collections/#{collection_id}/fork",
+      method: :post,
+      request_body: body,
+      response_body: request_body.merge(name: new_name)
+    )
+
+    collection = Chroma::Resources::Collection.new(id: collection_id, name: name)
+
+    forked_collection = collection.fork(new_name)
+
+    assert_instance_of(Chroma::Resources::Collection, forked_collection)
+    assert_equal new_name, forked_collection.name
   end
 
   private

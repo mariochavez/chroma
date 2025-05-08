@@ -26,16 +26,16 @@ class ChromaTest < Minitest::Test
   end
 
   def test_it_allows_api_version_configuration
-    Chroma.api_version = "v2"
-    assert_equal("v2", Chroma.api_version)
+    Chroma.api_version = "v3"
+    assert_equal("v3", Chroma.api_version)
   end
 
   def test_it_build_an_url_with_api_url
     Chroma.connect_host = "https://chroma-server.org"
     Chroma.api_base = "other/api"
-    Chroma.api_version = "v2"
+    Chroma.api_version = "v3"
 
-    assert_equal("https://chroma-server.org/other/api/v2", Chroma.api_url)
+    assert_equal("https://chroma-server.org/other/api/v3", Chroma.api_url)
   end
 
   def test_it_allows_to_set_api_key
@@ -74,6 +74,6 @@ class ChromaTest < Minitest::Test
     Chroma.connect_host = "https://chroma-server.org"
     Chroma.api_key = nil
 
-    assert_equal("https://chroma-server.org/api/v1", Chroma.api_url)
+    assert_equal("https://chroma-server.org/api/v2", Chroma.api_url)
   end
 end

@@ -94,7 +94,7 @@ module Chroma
 
     def initialize
       @api_base = "api"
-      @api_version = "v1"
+      @api_version = "v2"
 
       @log_level = Chroma::LEVEL_INFO
 

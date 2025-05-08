@@ -55,8 +55,9 @@ Chroma.database = "my_database" # Optional
 ## Requirements
 
 - Ruby 3.1.4 or newer
-- Chroma Database 0.4.24 or later running as a client/server model.
+- Chroma Database 0.6.3 or later running as a client/server model with Chroma v2 API.
 
+For Chroma database 0.6.2 or older (Chroma v1 API), please use version 0.8.2 of this gem.
 For Chroma database 0.3.22 or older, please use version 0.3.0 of this gem.
 
 ## Installation
