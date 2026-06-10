@@ -124,6 +124,21 @@ module Chroma
           request["X-Chroma-Token"] = api_key unless api_key.nil?
           request
         end
+
+        private def raise_failure_error(result)
+          case result.failure.error
+          in Exception => exception
+            raise Chroma::APIConnectionError.new(exception.message)
+          in Net::HTTPInternalServerError => response
+            if response.body.is_a?(String) && (response.body.include?("ValueError") || response.body.include?("IndexError") || response.body.include?("TypeError"))
+              raise Chroma::InvalidRequestError.new(result.failure.body, status: result.failure.status, body: result.failure.body)
+            else
+              raise Chroma::APIConnectionError.new(result.failure.body, status: result.failure.status, body: result.failure.body)
+            end
+          else
+            raise Chroma::APIError.new(result.failure.body, status: result.failure.status, body: result.failure.body)
+          end
+        end
       end
 
       def self.included(base)

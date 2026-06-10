@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- Support Chroma v2 API.
+
 ## 0.8.2 2024-10-16
 
 - Fixes API change in Collection#query method. Parameters `where` and `where_document` are now optional.
