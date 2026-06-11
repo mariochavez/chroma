@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [0.9.0] 2026-06-11
+
 - Support Chroma v2 API.
 
 ## 0.8.2 2024-10-16
